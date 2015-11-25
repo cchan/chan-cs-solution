@@ -2,8 +2,8 @@
 style.css
 Styles all the problem-numbered files.
 
-Problem: all
-Language: CSS (Helper File)
+Problem: all (Helper File)
+Language: CSS
 */
 
 body{
@@ -72,6 +72,9 @@ blockquote::before{
 	top: -0.4em;
 	left: -0.8em;
 	font-style: normal;
+}
+p{
+	text-indent: 3em;
 }
 
 footer{
