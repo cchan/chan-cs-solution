@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!--
+Problem: 2
+Language: JavaScript (with HTML and CSS)
+How to use: Just open this file in a relatively modern browser!
+-->
+<html>
+<head>
+	<title>MIT PRIMES Application 2016 - Problem 2</title>
+	<link rel="stylesheet" href="codeblock.js/codeblock.css" />
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<a id="top"></a>
+<header>
+	<h1>MIT PRIMES Application 2016</h1>
+	<h2>Problem 2</h2>
+	<nav>
+		Go to problem:
+		<a href="index.html">Index</a>
+		<a href="prob1.html">1</a>
+		<b>2</b>
+		<a href="prob3.html">3</a>
+		<a href="prob4.html">4</a>
+		<a href="prob5.html">5</a>
+		<a href="prob6.html">6</a>
+		<a href="prob7.html">7</a>
+		<a href="prob8.html">8</a>
+		<a href="prob9.html">9</a>
+		<a href="prob10.html">10</a>
+		<a href="prob11.html">11</a>
+		<a href="prob12.html">12</a>
+		<a href="sources.html">Sources</a>
+	</nav>
+</header>
+<article>
+	<ol>
+		<li>
+			<blockquote>Write a new version of the Fibonacci function that performs memoization.</blockquote>
+			<div class="codeblock">
+var cache = [0, 1, 1]; //The global cache of fibonacci numbers. (There are better ways, but this is quite sufficient and non-messy.)
+function fibonacciMemoized(n){
+	if(cache[n] !== undefined) //Cache hit! We use the value we already have.
+		return cache[n];
+	
+	else //Cache miss. We have to recursively calculate it, but when we do we'll store it in cache[].
+		return cache[n] = fibonacciMemoized(n-1) + fibonacciMemoized(n-2);
+}
+
+console.log("fibonacci(1) = " + fibonacciMemoized(1)); //Should be 1
+console.log("fibonacci(4) = " + fibonacciMemoized(4)); //Should be 3
+console.log("fibonacci(10) = " + fibonacciMemoized(10)); //Should be 55
+console.log("fibonacci(100) = " + fibonacciMemoized(100)); //Should be 354224848179261915075, plus or minus rounding error
+			</div>
+		</li>
+		<li>
+			<blockquote>How many function calls does your program make for $n = 5$? For $n = 100$?</blockquote>
+			<p>The number of function calls is far lower than in Problem 1, since in many cases the number has already been calculated.
+			There are three possible reasons <code>fibonacci(n)</code> could be called:</p>
+			<ul>
+				<li>It is the original invocation of <code>fibonacci()</code>. This is a single invocation.</li>
+				<li>It is being called by <code>fibonacci(n+1)</code>. Once it is called, it will not be called again by <code>fibonacci(n+1)</code>, since <code>cache[n+1]</code> will have a hit.</li>
+				<li>It is being called by <code>fibonacci(n+2)</code>. Just as above, it will not be called again by <code>fibonacci(n+2)</code>.</li>
+			</ul>
+			<p class="noindent">A special case occurs when $n=1$, since <code>fibonacci(2)</code> will never call <code>fibonacci(1)</code>. All numbers of invocations are thus listed in the table.</p>
+			<div style="text-align:center;">
+			$$
+				\begin{matrix}
+				\text{Value of n in f(n)} & n & n-1 & n-2 & n-3 & ... & 3 & 2 & 1\\
+				\text{Number of invocations of f(n)} & 1 & 1 & 2 & 2 & ... & 2 & 2 & 1\\
+				\end{matrix}
+			$$
+			</div>
+			<p>Therefore the total number of invocations of the function would be $2n-3$.</p>
+			
+			<p>We can verify these predictions by adding a counter:</p>
+			
+			<div class="codeblock">
+var cache = [0, 1, 1];
+var counter = 0;
+function fibonacciMemoized(n){
+	counter++;
+	
+	if(cache[n] !== undefined)
+		return cache[n];
+	else
+		return cache[n] = fibonacciMemoized(n-1) + fibonacciMemoized(n-2);
+}
+
+fibonacciMemoized(5);
+console.log(counter); //Should be 2 * 5 - 3 = 7
+
+//Reset the counter and cache so that it doesn't affect this fresh run
+counter = 0; cache = [0, 1, 1];
+fibonacciMemoized(100);
+console.log(counter); //Should be 2 * 100 - 3 = 197
+			</div>
+			
+			<p>Thus the total number of function calls for <code>fibonacci(5)</code> is $\boxed{7}$, and the total number for <code>fibonacci(100)</code> is $\boxed{197}$. Much better than $O(~2^n)$.</p>
+		</li>
+	</ol>
+</article>
+<footer>
+	<div>MIT PRIMES Application 2016</div>
+	<a href="#top">Back to top</a>
+</footer>
+
+<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="codeblock.js/ace.js"></script>
+<script src="codeblock.js/codeblock.js"></script>
+<script>
+	MathJax.Hub.Config({tex2jax: {
+		inlineMath: [['$','$']],
+		displayMath: [['$$','$$']]
+	}});
+	$(function(){$(".codeblock").codeblock();});
+</script>
+</body>
+</html>

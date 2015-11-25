@@ -18,7 +18,7 @@ How to use: Just open this file in a relatively modern browser!
 	<nav>
 		Go to problem:
 		<a href="index.html">Index</a>
-		<a href="prob1.html">1</a>
+		<b>1</b>
 		<a href="prob2.html">2</a>
 		<a href="prob3.html">3</a>
 		<a href="prob4.html">4</a>
@@ -36,9 +36,7 @@ How to use: Just open this file in a relatively modern browser!
 <article>
 	<ol>
 		<li>
-			<blockquote>
-				What is $F_8$?
-			</blockquote>
+			<blockquote>What is $F_8$?</blockquote>
 			<p>
 				We can simply list out the numbers: $1, 1, 2, 3, 5, 8, 13, 21$.
 			</p>
@@ -47,35 +45,34 @@ How to use: Just open this file in a relatively modern browser!
 			</p>
 		</li>
 		<li>
-			<blockquote>
-				Write a function that takes a single positive integer $n$ and returns $F_n$.
-			</blockquote>
+			<blockquote>Write a function that takes a single positive integer $n$ and returns $F_n$.</blockquote>
 			This piece of code pretty much is exactly the definition, 
-			except for the addition of <code>fibonnaci(0) = 0</code> for completeness, and returning 0 for negative $n$.
+			except for the addition of <code>fibonacci(0) = 0</code> for completeness, and returning 0 for negative $n$.
 			
 			<div class="codeblock">
-function fibonnaci(n){
+function fibonacci(n){
 	if(n <= 0) return 0;
 	else if(n <= 2) return 1;
-	else return fibonnaci(n-1) + fibonnaci(n-2);
+	else return fibonacci(n-1) + fibonacci(n-2);
 }
-console.log("fibonnaci(1) = " + fibonnaci(1)); //Should be 1
-console.log("fibonnaci(3) = " + fibonnaci(3)); //Should be 2
-console.log("fibonnaci(8) = " + fibonnaci(8)); //Should be 21
+console.log("fibonacci(1) = " + fibonacci(1)); //Should be 1
+console.log("fibonacci(3) = " + fibonacci(3)); //Should be 2
+console.log("fibonacci(8) = " + fibonacci(8)); //Should be 21
 			</div>
 		</li>
 		<li>
+			<blockquote>How many function calls does your function make in order to compute $F_5$? What are those function calls?</blockquote>
 			<p>
-				Let $N_n$ be the number of times the <code>fibonnaci()</code> function is called when <code>fibonnaci(n)</code> is invoked.
+				Let $N_n$ be the number of times the <code>fibonacci()</code> function is called when <code>fibonacci(n)</code> is invoked.
 				$N_1 = N_2 = 1$, since the function immediately returns.
-				$N_3 = 3$, counting the call to <code>fibonacci(3)</code>, which in turn calls <code>fibonnaci(2)</code> and <code>fibonnaci(1)</code>.
+				$N_3 = 3$, counting the call to <code>fibonacci(3)</code>, which in turn calls <code>fibonacci(2)</code> and <code>fibonacci(1)</code>.
 				Thus, $N_i = 1 + N_{i-1} + N_{i-2}$.
 			</p>
 			<p>
 				The first few terms of $N_i$ are $1, 1, 3, 5, 9$. We're looking for $N_5 = 9$, so the final answer is $\boxed{9}$ invocations of the function.
 			</p>
 			
-			<p>The answer could also be obtained like this:</p>
+			<p>The specific calls can be obtained like the following, by mapping out the calls in a tree:</p>
 			
 			<div style="text-align:center;"><pre style="text-align:left;display:inline-block;">
 F(5)
@@ -89,12 +86,15 @@ F(3)    F(2)    F(2)     F(1)
  |    |
 F(2)  F(1)
 			</pre></div>
-			<p class="noindent">which also results in the same answer of $\boxed{9}$.</p>
+			<p class="noindent">which also results in the same answer of $\boxed{9}$ total calls. 
+			This results in some annoyance, as $F_3$ is used twice yet it recomputes itself both times. Time for some memoization ;)</p>
 		</li>
 		<li>
-			As the definition of $N$ includes two previous terms of $N$, the number of calls to <code>fibonnaci()</code> should grow approximately as $O(2^n)$.
+			<blockquote>Explain how the number of these calls would grow when $n$ increases. Why is this not a reasonable way of computing Fibonacci numbers?</blockquote>
+			
+			<p>As the definition of $N$ in the previous part includes two previous terms of $N$, the number of calls to <code>fibonacci()</code> should grow approximately as $O(2^n)$.
 			Since exponential functions get rather big rather fast, it would be quite unreasonable to compute, say, 
-			a mere <code>fibonnaci(100)</code>. It would take $708449696358523500000$ calls:
+			a mere <code>fibonacci(100)</code>. It would take around $708449696358523500000$ calls (JavaScript doesn't even have enough floating-point precision to know the exact number):</p>
 			
 			<div class="codeblock">
 var N = [0, 1, 1]; //Predefine N_1 and N_2 as 1.

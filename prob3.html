@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+Problem: 3
+Language: JavaScript (with HTML and CSS)
+How to use: Just open this file in a relatively modern browser!
+-->
+<html>
+<head>
+	<title>MIT PRIMES Application 2016 - Problem 3</title>
+	<link rel="stylesheet" href="codeblock.js/codeblock.css" />
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<a id="top"></a>
+<header>
+	<h1>MIT PRIMES Application 2016</h1>
+	<h2>Problem 3</h2>
+	<nav>
+		Go to problem:
+		<a href="index.html">Index</a>
+		<a href="prob1.html">1</a>
+		<a href="prob2.html">2</a>
+		<b>3</b>
+		<a href="prob4.html">4</a>
+		<a href="prob5.html">5</a>
+		<a href="prob6.html">6</a>
+		<a href="prob7.html">7</a>
+		<a href="prob8.html">8</a>
+		<a href="prob9.html">9</a>
+		<a href="prob10.html">10</a>
+		<a href="prob11.html">11</a>
+		<a href="prob12.html">12</a>
+		<a href="sources.html">Sources</a>
+	</nav>
+</header>
+<article>
+	<ol>
+		<li class="only">
+			<blockquote>Write a function that takes $n$ and returns $F_n$. The function must have only a loop, no recursion or a table.</blockquote>
+			<p>Simply use two variables to store the "current" two Fibonacci values. This allows the next value to be produced and for the next iteration to be made.</p>
+			<div class="codeblock">
+function fibonacciLoop(n){
+	var F1 = 1, F2 = 1;
+	for(var i = 1; i < n; i++){
+		var oldF1 = F1;	//Store the old first value away for later
+		F1 = F2;		//Shift the second value down to the first value
+		F2 = F2 + oldF1;//Add both the first and second values up to the second value.
+	}
+	return F1;
+}
+
+console.log(fibonacciLoop(1)); //Should be 1
+console.log(fibonacciLoop(4)); //Should be 3
+console.log(fibonacciLoop(10)); //Should be 55
+			</div>
+		</li>
+	</ol>
+</article>
+<footer>
+	<div>MIT PRIMES Application 2016</div>
+	<a href="#top">Back to top</a>
+</footer>
+
+<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="codeblock.js/ace.js"></script>
+<script src="codeblock.js/codeblock.js"></script>
+<script>
+	MathJax.Hub.Config({tex2jax: {
+		inlineMath: [['$','$']],
+		displayMath: [['$$','$$']]
+	}});
+	$(function(){$(".codeblock").codeblock();});
+</script>
+</body>
+</html>

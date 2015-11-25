@@ -27,15 +27,15 @@ header h2{
 }
 
 article{
-	width: 60%;
+	width: 70%;
 	margin-left: auto;
 	margin-right: auto;
 }
-article ol{
+article>ol{
 	counter-reset: questionpart;
 	list-style: none;
 }
-article ol li{
+article>ol>li{
 	counter-increment: questionpart;
 	background-color: white;
 	margin: 1em;
@@ -43,7 +43,7 @@ article ol li{
 	border-radius: 10px;
 	position: relative;
 }
-article ol li::before{
+article>ol>li::before{
 	content: counter(questionpart);
 	font-size: 2.5em;
 	font-weight: bold;
@@ -51,17 +51,19 @@ article ol li::before{
 	position: absolute;
 	width: 5em;
 	left: -5.2em;
-	top: 0;
+	top: 0.3em;
 	text-align: right;
 }
-article ol li:nth-child(1)::before{
+article>ol>li:nth-child(1)::before{
 	content: "Part 1";
 }
+article>ol>li.only::before{content:"";}
 
 blockquote{
 	position: relative;
 	font-style: italic;
 	opacity: 0.7;
+	margin-bottom: 2em;
 }
 blockquote::before{
 	content:"?";
