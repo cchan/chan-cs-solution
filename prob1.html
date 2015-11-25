@@ -7,6 +7,7 @@ How to use: Just open this file in a relatively modern browser!
 <html>
 <head>
 	<title>MIT PRIMES Application 2016 - Problem 1</title>
+	<link rel="stylesheet" href="codeblock.js/codeblock.css" />
 	<link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -16,7 +17,7 @@ How to use: Just open this file in a relatively modern browser!
 	<h2>Problem 1</h2>
 	<nav>
 		Go to problem:
-		<a href="index.html">index</a>
+		<a href="index.html">Index</a>
 		<a href="prob1.html">1</a>
 		<a href="prob2.html">2</a>
 		<a href="prob3.html">3</a>
@@ -29,64 +30,78 @@ How to use: Just open this file in a relatively modern browser!
 		<a href="prob10.html">10</a>
 		<a href="prob11.html">11</a>
 		<a href="prob12.html">12</a>
+		<a href="sources.html">Sources</a>
 	</nav>
 </header>
 <article>
 	<ol>
 		<li>
-			<blockquote>What is F<sub>8</sub>?</blockquote>
+			<blockquote>
+				What is $F_8$?
+			</blockquote>
 			<p>
-				We can simply list out the numbers: 1, 1, 2, 3, 5, 8, 13, 21.
-			F_8 = 21.
+				We can simply list out the numbers: $1, 1, 2, 3, 5, 8, 13, 21$.
+			</p>
+			<p>
+				Therefore $F_8 = \boxed{21}$.
+			</p>
 		</li>
 		<li>
+			<blockquote>
+				Write a function that takes a single positive integer $n$ and returns $F_n$.
+			</blockquote>
 			This piece of code pretty much is exactly the definition, 
-			except for the addition of F(0) for completeness, and returning 0 for negative n.
+			except for the addition of <code>fibonnaci(0) = 0</code> for completeness, and returning 0 for negative $n$.
 			
-			<span class="codeblock">
-				function fibonnaci(var n){
-					if(n <= 0) return 0;
-					else if(n <= 2) return 1;
-					else return fibonnaci(n-1) + fibonnaci(n-2);
-				}
-				alert(fibonnaci(8));
-			</span>
+			<div class="codeblock">
+function fibonnaci(n){
+	if(n <= 0) return 0;
+	else if(n <= 2) return 1;
+	else return fibonnaci(n-1) + fibonnaci(n-2);
+}
+console.log("fibonnaci(1) = " + fibonnaci(1)); //Should be 1
+console.log("fibonnaci(3) = " + fibonnaci(3)); //Should be 2
+console.log("fibonnaci(8) = " + fibonnaci(8)); //Should be 21
+			</div>
 		</li>
 		<li>
-			Let N_n be the number of times the fibonnaci() function is called for an invocation of fibonnaci(n).
-			N_1 and N_2 both are 1, since the function immediately returns.
-			N_3 = 3, counting the call to fibonacci(3), which in turn calls fibonnaci(2) and fibonnaci(1).
-			Thus, N_i = 1 + N_(i-1) + N_(i-2).
-			The first few terms of N_i are 1, 1, 3, 5, 9. We're looking for N_5, so the answer is 9.
-
-			The answer could also be obtained like this:
-			<pre>
-			F(5)
-			 |_______________   
-			 |               |
-			F(4)            F(3)
-			 |_______        |________
-			 |       |       |        |
-			F(3)    F(2)    F(2)     F(1)
-			 |____ 
-			 |    |
-			F(2)  F(1)
-			</pre>
-			which also results in the same answer of 9.
+			<p>
+				Let $N_n$ be the number of times the <code>fibonnaci()</code> function is called when <code>fibonnaci(n)</code> is invoked.
+				$N_1 = N_2 = 1$, since the function immediately returns.
+				$N_3 = 3$, counting the call to <code>fibonacci(3)</code>, which in turn calls <code>fibonnaci(2)</code> and <code>fibonnaci(1)</code>.
+				Thus, $N_i = 1 + N_{i-1} + N_{i-2}$.
+			</p>
+			<p>
+				The first few terms of $N_i$ are $1, 1, 3, 5, 9$. We're looking for $N_5 = 9$, so the final answer is $\boxed{9}$ invocations of the function.
+			</p>
+			
+			<p>The answer could also be obtained like this:</p>
+			
+			<div style="text-align:center;"><pre style="text-align:left;display:inline-block;">
+F(5)
+ |_______________   
+ |               |
+F(4)            F(3)
+ |_______        |________
+ |       |       |        |
+F(3)    F(2)    F(2)     F(1)
+ |____ 
+ |    |
+F(2)  F(1)
+			</pre></div>
+			<p class="noindent">which also results in the same answer of $\boxed{9}$.</p>
 		</li>
 		<li>
-			As the definition of N includes two previous terms of N, the number of calls grows approximately as 2^n.
+			As the definition of $N$ includes two previous terms of $N$, the number of calls to <code>fibonnaci()</code> should grow approximately as $O(2^n)$.
 			Since exponential functions get rather big rather fast, it would be quite unreasonable to compute, say, 
-			a mere fibonnaci(50). It would take 53316291172 calls:
+			a mere <code>fibonnaci(100)</code>. It would take $708449696358523500000$ calls:
 			
-			<span class="codeblock">
-			function getNumberOfCalls(int fibIndex){
-				var N = [0, 1, 1]; //Predefine N_1 and N_2 as 1.
-				for(var i = 3; i <= fibIndex; i++)
-					N[i] = N[i-1] + N[i-2] + 1; //As defined in #3: N_i = 1 + N_(i-1) + N_(i-2)
-				return N[fibIndex];
-			}
-			</span>
+			<div class="codeblock">
+var N = [0, 1, 1]; //Predefine N_1 and N_2 as 1.
+for(var i = 3; i <= 100; i++) //Up to N_100
+	N[i] = N[i-1] + N[i-2] + 1; //As defined in #3: N_i = 1 + N_(i-1) + N_(i-2)
+console.log("N_100 = " + N[100]);
+			</div>
 		</li>
 	</ol>
 </article>
@@ -94,5 +109,17 @@ How to use: Just open this file in a relatively modern browser!
 	<div>MIT PRIMES Application 2016</div>
 	<a href="#top">Back to top</a>
 </footer>
+
+<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="codeblock.js/ace.js"></script>
+<script src="codeblock.js/codeblock.js"></script>
+<script>
+	MathJax.Hub.Config({tex2jax: {
+		inlineMath: [['$','$']],
+		displayMath: [['$$','$$']]
+	}});
+	$(function(){$(".codeblock").codeblock();});
+</script>
 </body>
 </html>
