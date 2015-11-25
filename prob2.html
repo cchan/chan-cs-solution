@@ -15,6 +15,7 @@ How to use: Just open this file in a relatively modern browser!
 <header>
 	<h1>MIT PRIMES Application 2016</h1>
 	<h2>Problem 2</h2>
+	<noscript><h2 style="color:red">Your JavaScript is off :( It's very hard to use this without JavaScript!</h2></noscript>
 	<nav>
 		Go to problem:
 		<a href="index.html">Index</a>
@@ -62,7 +63,7 @@ console.log("fibonacci(100) = " + fibonacciMemoized(100)); //Should be 354224848
 				<li>It is being called by <code>fibonacci(n+1)</code>. Once it is called, it will not be called again by <code>fibonacci(n+1)</code>, since <code>cache[n+1]</code> will have a hit.</li>
 				<li>It is being called by <code>fibonacci(n+2)</code>. Just as above, it will not be called again by <code>fibonacci(n+2)</code>.</li>
 			</ul>
-			<p class="noindent">A special case occurs when $n=1$, since <code>fibonacci(2)</code> will never call <code>fibonacci(1)</code>. All numbers of invocations are thus listed in the table.</p>
+			<p class="noindent">A special case occurs when $n=1$, since <code>fibonacci(2)</code> immediately returns and will never call <code>fibonacci(1)</code>. All numbers of invocations are thus listed in the table.</p>
 			<div style="text-align:center;">
 			$$
 				\begin{matrix}
@@ -96,7 +97,7 @@ fibonacciMemoized(100);
 console.log(counter); //Should be 2 * 100 - 3 = 197
 			</div>
 			
-			<p>Thus the total number of function calls for <code>fibonacci(5)</code> is $\boxed{7}$, and the total number for <code>fibonacci(100)</code> is $\boxed{197}$. Much better than $O(~2^n)$.</p>
+			<p>Thus the total number of function calls for <code>fibonacci(5)</code> is $\boxed{7}$, and the total number for <code>fibonacci(100)</code> is $\boxed{197}$. Much better than $O(~2^n)$ - it's $O(n)$.</p>
 		</li>
 	</ol>
 </article>
