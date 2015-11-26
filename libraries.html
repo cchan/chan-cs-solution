@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-Problem 3
+Libraries
 
 Language: JavaScript (with HTML, CSS)
 How to use: Just open this file in a relatively modern browser!
@@ -9,7 +9,7 @@ How to use: Just open this file in a relatively modern browser!
 -->
 <html>
 <head>
-	<title>MIT PRIMES Application 2016 - Problem 3</title>
+	<title>MIT PRIMES Application 2016 - Libraries</title>
 	<link rel="stylesheet" href="codeblock.js/codeblock.css" />
 	<link rel="stylesheet" href="style.css" />
 </head>
@@ -17,14 +17,14 @@ How to use: Just open this file in a relatively modern browser!
 <a id="top"></a>
 <header>
 	<h1>MIT PRIMES Application 2016</h1>
-	<h2>Problem 3</h2>
+	<h2>Libraries</h2>
 	<noscript><h2 style="color:red">All of my code is in JavaScript, but your browser's JavaScript is off :(</h2></noscript>
 	<nav>
 		Go to:
 		<a href='index.html'>Index</a> 
 <a href='prob1.html'>1</a> 
 <a href='prob2.html'>2</a> 
-<b>3</b> 
+<a href='prob3.html'>3</a> 
 <a href='prob4.html'>4</a> 
 <a href='prob5.html'>5</a> 
 <a href='prob6.html'>6</a> 
@@ -34,32 +34,19 @@ How to use: Just open this file in a relatively modern browser!
 <a href='prob10.html'>10</a> 
 <a href='prob11.html'>11</a> 
 <a href='prob12.html'>12</a> 
-<a href='libraries.html'>Libraries</a> 
+<b>Libraries</b> 
 
 	</nav>
 </header>
 <article>
-<ol>
-	<li class="only">
-		<blockquote>Write a function that takes $n$ and returns $F_n$. The function must have only a loop, no recursion or a table.</blockquote>
-		<p>Simply use two variables to store the "current" two Fibonacci values. This allows the next value to be produced and for the next iteration to be made.</p>
-		<div class="codeblock">
-function fibonacciLoop(n){
-	var F1 = 1, F2 = 1;
-	for(var i = 1; i < n; i++){
-		var oldF1 = F1;	//Store the old first value away for later
-		F1 = F2;		//Shift the second value down to the first value
-		F2 = F2 + oldF1;//Add both the first and second values up to the second value.
-	}
-	return F1;
-}
-
-console.log(fibonacciLoop(1)); //Should be 1
-console.log(fibonacciLoop(4)); //Should be 3
-console.log(fibonacciLoop(10)); //Should be 55
-		</div>
-	</li>
-</ol>
+<p>A number of libraries helped with this problem set.</p>
+<ul>
+	<li>For all mathematics formatting I use the <a href="https://www.mathjax.org/">MathJax</a> JavaScript library.</li>
+	<li>All code snippets use <a href="https://ink.github.io/codeblock.js/">codeblock.js</a> to make them editable and runnable, which in turn depends on <a href="https://jquery.com/">JQuery</a> and <a href="https://ace.c9.io/">Ace</a>.</li>
+	<li>Templates are done with <a href="https://github.com/janl/mustache.js/">Mustache</a>. (see the /src directory)</li>
+	<li><code>compile.js</code> is run with <a href="https://nodejs.org/en/">Node.js</a>.</li>
+	<li>This code is hosted on <a href="https://bitbucket.org">BitBucket</a> at <a href="http://primes-app-2016.bitbucket.org">http://primes-app-2016.bitbucket.org</a>, and uses <a href="https://git-scm.com/">Git</a> to track and sync changes.</li>
+</ul>
 
 </article>
 <footer>
