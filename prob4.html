@@ -52,12 +52,25 @@ How to use: Just open this file in a relatively modern browser!
 			$$
 			Suppose one performs the multiplications left-to-right: $((A_1 \times A_2) \times A_3) \times A_4$. How many scalar multiplications would be performed?
 		</blockquote>
-		$A_1 \times A_2$ gives values of $n=5$, $m=4$, 
+		<p>Since the number of scalar multiplications is $n \cdot m \cdot k$:</p>
+		<ul>
+			<li>$A_1 \times A_2$ gives values of $n=5$, $m=4$, $k=2$, and so $n \cdot m \cdot k = 40$.</li>
+			<li>Multiplying by $A_3$ gives $n \cdot m \cdot k = 5 \cdot 2 \cdot 10 = 100$.</li>
+			<li>Multiplying by $A_4$ gives $n \cdot m \cdot k = 5 \cdot 10 \cdot 3 = 150$.</li>
+		</ul>
+		<p>Thus the total number of scalar multiplications required is $40 + 100 + 150 = 290$.</p>
 	</li>
 	<li>
 		<blockquote>
 			How many scalar multiplications are performed when the multiplication proceeds right-to-left: $A_1 \times (A_2 \times (A_3 \times A_4))$?
 		</blockquote>
+		<p>This is done quite similarly, except for different values of $n$, $m$, and $k$.</p>
+		<ul>
+			<li>$A_3 \times A_4 \Rightarrow 2 \cdot 10 \cdot 3 = 60$.</li>
+			<li>$A_2 \times (A_3 \times A_4) \Rightarrow 4 \cdot 2 \cdot 3 = 24$.</li>
+			<li>$A_3 \times (A_2 \times (A_3 \times A_4)) \Rightarrow 5 \cdot 4 \cdot 3 = 60$.</li>
+		</ul>
+		<p>$\sum = 144$.</p>
 	</li>
 </ol>
 

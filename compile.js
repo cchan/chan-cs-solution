@@ -1,6 +1,7 @@
 /*
 compile.js
-Compiles stuff from the src directory into the root directory html files.
+Compiles stuff from the /src directory into the root directory html files.
+Watches for changes in /src and recompiles on change.
 
 Language: NodeJS
 How to use: Don't! Just use the already compiled files. If you really need to, run "node compile" to run this NodeJS program.
@@ -28,34 +29,49 @@ var nav = [
 var fs = require('fs');
 var mu = require('./src/mustache.js');
 
-console.log("Compiling pages... ");
+function compile(){
+	console.log("Compiling pages... ");
 
-var template = fs.readFileSync('./src/TEMPLATE.html','utf8');
-mu.parse(template);
+	var template = fs.readFileSync('./src/TEMPLATE.html','utf8');
+	mu.parse(template);
 
-for(var i = 0; i < nav.length; i++){
-	(function(i){ //Callback scoping is tricky, I need to capture the variable's current value, since it'll have changed by the time the callback is called. https://stackoverflow.com/questions/8026853/passing-variables-to-callbacks-in-node-js
-		fs.readFile('./src/'+nav[i].href+'.content.html', 'utf8', function(err, content){
-			if(err)console.log(nav[i].title + ": Read error");
-			else{
-				var navlinks = "";
-				for(var k = 0; k < nav.length; k++){
-					if(k == i)navlinks += "<b>"+nav[k].label+"</b> \n";
-					else navlinks += "<a href='"+nav[k].href+".html'>"+nav[k].label+"</a> \n";
+	for(var i = 0; i < nav.length; i++){
+		(function(i){ //Callback scoping is tricky, I need to capture the variable's current value, since it'll have changed by the time the callback is called. https://stackoverflow.com/questions/8026853/passing-variables-to-callbacks-in-node-js
+			fs.readFile('./src/'+nav[i].href+'.content.html', 'utf8', function(err, content){
+				if(err)console.log(nav[i].title + ": Read error");
+				else{
+					var navlinks = "";
+					for(var k = 0; k < nav.length; k++){
+						if(k == i)navlinks += "<b>"+nav[k].label+"</b> \n";
+						else navlinks += "<a href='"+nav[k].href+".html'>"+nav[k].label+"</a> \n";
+					}
+					
+					var processed = mu.render(template,{
+						title: nav[i].title,
+						navlinks: navlinks,
+						content: content
+					});
+					
+					fs.writeFile('./'+nav[i].href+'.html', processed, 'utf8', function(err){
+						if(err)console.log(nav[i].title + ": Write error");
+						else console.log(nav[i].title + ": Compiled successfully to /"+nav[i].href+".html.");
+					});
 				}
-				
-				var processed = mu.render(template,{
-					title: nav[i].title,
-					navlinks: navlinks,
-					content: content
-				});
-				
-				fs.writeFile('./'+nav[i].href+'.html', processed, 'utf8', function(err){
-					if(err)console.log(nav[i].title + ": Write error");
-					else console.log(nav[i].title + ": Compiled successfully to /"+nav[i].href+".html.");
-				});
-			}
-		});
-	})(i);
+			});
+		})(i);
+	}
 }
+
+compile();
+
+//Filesystem watching is pretty simple, albeit with some quirks because of how DOS and FAT works: https://stackoverflow.com/questions/10762630/nodejs-fs-watch-on-directory-only-fires-when-changed-by-editor-but-not-shell-or
+var compiling = false;
+fs.watch('src',function(){ //should catch changes by most text editors
+	if(!compiling){
+		compiling = true;
+		compile();
+		console.log("\n");
+		setTimeout(function(){compiling = false;},1000); //Sometimes it repeats itself, but I'll never be requesting it to compile more than once a second, so we can have a cooldown like this.
+	}
+});
 
