@@ -11,6 +11,7 @@ body{
 	background-color: #eee;
 	padding: 0;
 	margin: 0;
+	font-size: 12pt;
 }
 
 header{
@@ -25,6 +26,8 @@ header h2{
 	font-size: 3em;
 	margin: 0.25em;
 }
+header nav{font-size: 1.5em;}
+header nav a, header nav b{margin: 0.2em;}
 
 article{
 	width: 70%;
@@ -97,6 +100,13 @@ p.noindent{text-indent:0;}
 .codeblock-container{
 	margin-top: 1em;
 	margin-bottom: 1em;
+	font-size: 0.8em;
+}
+.codeblock-console-run{
+	padding-left:30px;padding-right:30px;
+}
+.codeblock-console-text{
+	margin-right: -40px;
 }
 ul, ol{
 	margin-left: 3em;

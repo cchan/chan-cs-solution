@@ -47,8 +47,138 @@ How to use: Just open this file in a relatively modern browser!
 			Prove or disprove: The optimal number of copies can always be achieved
 			by choosing the break closest to the middle in a top-down fashion.
 		</blockquote>
-		<p>
+		<p>I feel like this is true, but don't know how to approach it. 
+		Particularly, I tested a few examples where there were two possibilities for the "middle" break since they were equidistant from the actual middle, 
+		and they turned out to give the optimal solution either way.</p>
+		<p>Well, when in doubt, test random examples:</p>
+		<script> //Code copied from Problem 11, hidden from the displayed codeblock.
+function cost(strlength, breaks){
+	var tree = [[]]; //Stores the tree for the dynamic programming storage.
+	var breakorder = [[]]; //Stores the break orders for each element in the tree
+	var len = breaks.length + 1; //The number of segments. Useful because breaks[0] and breaks[len] are going to be added as the extremes.
+	
+	//Add in B_0 = 0 and B_N = L so things generalize a little bit better (rather than using prolific if statements)
+	breaks.splice(0,0,0);
+	breaks[len] = strlength;
+	
+	for(var i = 0; i <= len; i++){
+		tree[i] = [];
+		tree[i][i + 1] = 0;
+		
+        //Initialize the break-order expressions - you don't break any strings when the indices are only one apart
+		breakorder[i] = [];
+		breakorder[i][i + 1] = "";
+	}
+	
+	for(var treerow = 2; treerow <= len; treerow++){ //For each row of the tree after the 1st,
+		for(var i = 0; i <= len - treerow; i++){ //For each element of that row,
+			var j = i + treerow;
 			
+			//we find the cost formula's minimum across all k
+			var mincost = tree[i][i+1] + tree[i+1][j] + breaks[j] - breaks[i]; //(initialize with first iteration of loop (k=i+1), to avoid setting min = some arbitrary large number)
+			var mink = i+1;
+			
+			for(var k = i+2; k < j; k++){
+				var cost = tree[i][k] + tree[k][j] + breaks[j] - breaks[i];
+				if(cost < mincost){mincost = cost; mink = k;}
+			}
+			tree[i][j] = mincost; //and set that element in the tree to be that minimum cost
+			breakorder[i][j] = breaks[mink]
+				+ ((breakorder[i][mink]!="")? ", " + breakorder[i][mink]: "")
+				+ ((breakorder[mink][j]!="")? ", " + breakorder[mink][j]: ""); //and use that minimizing k to figure out the break-order
+		}
+	}
+    
+	return [tree[0][len], breakorder[0][len]];//Finally, we return the apex element and its corresponding break-order.
+}
+			</script>
+			<div class="codeblock">
+//omitted for brevity: implementation of cost() with dynamic programming (from Problem 11)
+
+function costMiddle(i, j, breaks){
+	var middle = (i+j)/2;
+	var minDistanceToMiddle = Math.abs(breaks[0] - middle);
+	var minx = 0;
+	for(var x = 1; x < breaks.length; x++){ //Figures out which break is closest to the middle
+		if(Math.abs(breaks[x] - middle) < minDistanceToMiddle){
+			minx = x;
+			minDistanceToMiddle = Math.abs(breaks[x] - middle);
+		}
+	}
+	if(breaks[minx] == i || breaks[minx] == j) //If it's one of the endpoints, that means we only have a single segment, so we end
+		return 0;
+	return costMiddle(i,breaks[minx],breaks) + costMiddle(breaks[minx],j,breaks) + j - i; //Otherwise recurse and keep breaking in the middle.
+}
+
+function costMiddleMultiple(i, j, breaks){
+	var middle = (i+j)/2;
+	var minDistanceToMiddle = Math.abs(breaks[0] - middle);
+	var minx = [0];
+	for(var x = 1; x < breaks.length; x++){ //Figures out which breaks are closest to the middle
+		if(Math.abs(breaks[x] - middle) == minDistanceToMiddle){
+			minx[minx.length] = x;
+		}
+		if(Math.abs(breaks[x] - middle) < minDistanceToMiddle){
+			minx = [x];
+			minDistanceToMiddle = Math.abs(breaks[x] - middle);
+		}
+	}
+	if(breaks[minx[0]] == i) //if it's one of the endpoints, that means we only have a single segment, so we end
+		return 0;
+	var minCost = 10000000;
+	for(var x = 0; x < minx.length; x++){ //For each break closest to the middle, 
+		var cost = costMiddle(i,breaks[minx[x]],breaks) + costMiddle(breaks[minx[x]],j,breaks) + j - i; //we recurse and keep breaking in the middle
+		if(minCost > cost) minCost = cost;
+	}
+	return minCost; //and figure out which of those two "middle" options is the least costly.
+}
+
+function randPosInt(max){ //Random positive integer from 1 to max inclusive.
+	return Math.floor(Math.random()*max) + 1;
+}
+function generateStringBreaks(howmany,maxlen){ //Generates string breaks with howmany number of segments, each with random length from 1 to maxlen inclusive.
+	var breaks = [randPosInt(maxlen)];
+	for(var i = 1; i < howmany; i++)
+		breaks[i] = breaks[i-1] + randPosInt(maxlen);
+	return breaks;
+}
+
+console.log("TESTING");
+
+var c = cost(20,[2,8,10]);
+console.log("Cost: " + c[0]); //Should be 38
+console.log("Break order: " + c[1]); //Should be 10, 2, 8 or 10, 8, 2
+
+var c = costMiddle(0,20,[2,8,10]);
+console.log("Cost: " + c); //Should be 38
+
+var c = costMiddleMultiple(0,20,[2,8,10]);
+console.log("Cost: " + c); //Should be 38
+
+console.log("DISCOVERY");
+for(var i = 0; i < 100; i++){
+	var numBreaks = 3;
+	var maxlen = 4; //maximum length of any segment (passed into generateStringBreaks())
+	var breaks = generateStringBreaks(numBreaks,maxlen);
+	var strlength = breaks[breaks.length - 1] + randPosInt(maxlen); //Add a little more for the last segment before the end of the total string
+	
+	var resultTrue = cost(strlength, breaks);
+	var resultMiddle = costMiddle(0, strlength, breaks);
+	var resultMiddleMultiple = costMiddleMultiple(0, strlength, breaks);
+	
+	if(resultTrue[0] != resultMiddleMultiple) //Didn't find optimal cost
+		console.log("Contradiction found for MiddleMultiple: strlength "+strlength+", breaks "+breaks+" correct sequence "+resultTrue[1]);
+	else if(resultTrue[0] != resultMiddle) //If it doesn't work for MiddleMultiple, it can't possibly work for plain Middle
+		console.log("Contradiction found for Middle: strlength "+strlength+", breaks "+breaks+" correct sequence "+resultTrue[1]);
+}
+			</div>
+			<p>Thus a contradiction is found: when $L=7$ and $B = [2, 3, 4]$. 
+			But it looks like just that the middle method can't decide where to put the break between two breaks equally close to the middle, 
+			so it chose the wrong one. Maybe it needs to be able to figure out which. I thus modified the <code>costMiddle</code> function 
+			to become <code>costMiddleMultiple</code>, which, whenever it finds two breaks equally close to the middle, will test both breaks and pick the better one.</p>
+			<p>Fascinatingly, it's <i>still</i> wrong. When $L=8$ and $B = [3, 4, 5]$, <code>costMiddleMultiple</code> will break it at 4 first, followed by 3 and 5, resulting in a total cost of 16,
+			but the most efficient way is actually to break at 3 and 5 first, then at 4 last, resulting in a total cost of 15.</p>
+			<p>Well, it looked intuitively right (and usually actually gets pretty close), but apparently it's wrong in the general case.</p>
 		</p>
 	</li>
 </ol>
