@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--
+Problem 11
+
+Language: JavaScript (with HTML, CSS)
+How to use: Just open this file in a relatively modern browser!
+
+(Compiled from /src with compile.js.)
+-->
+<html>
+<head>
+	<title>MIT PRIMES Application 2016 - Problem 11</title>
+	<link rel="stylesheet" href="codeblock.js/codeblock.css" />
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<a id="top"></a>
+<header>
+	<h1>MIT PRIMES Application 2016</h1>
+	<h2>Problem 11</h2>
+	<noscript><h2 style="color:red">All of my code is in JavaScript, but your browser's JavaScript is off :(</h2></noscript>
+	<nav>
+		Go to:
+		<a href='index.html'>Index</a> 
+<a href='prob1.html'>1</a> 
+<a href='prob2.html'>2</a> 
+<a href='prob3.html'>3</a> 
+<a href='prob4.html'>4</a> 
+<a href='prob5.html'>5</a> 
+<a href='prob6.html'>6</a> 
+<a href='prob7.html'>7</a> 
+<a href='prob8.html'>8</a> 
+<a href='prob9.html'>9</a> 
+<a href='prob10.html'>10</a> 
+<b>11</b> 
+<a href='prob12.html'>12</a> 
+<a href='libraries.html'>Libraries</a> 
+
+	</nav>
+</header>
+<article>
+<ol>
+	<li>
+		<blockquote>Describe a dynamic programming solution as a table that gets
+		filled up in a bottom-up fashion. Fill in the table for the example in Problem 9.
+		</blockquote>
+		
+		<p>In problem 9, $B = [0,2,8,10,20]$</p>
+		
+		<p>As in Problem 10:</p>
+		<div style="text-align:center"><pre style="text-align:left;display:inline-block;">
+            C[0,4]
+        C[0,3]   C[1,4]
+    C[0,2]  C[1,3]  C[2,4]
+C[0,1]  C[1,2]  C[2,3]  C[3,4]
+</pre></div>
+		<p>The bottom row is defined to be zeroes, since $i=j-1$.</p>
+		<p>For the next row, $C[0,2] = C[0, 1] + C[1, 2] + B_2 - B_0 = 0 + 0 + 8 - 0 = 8$ since $k$ may only equal $1$. 
+		Likewise, $C[1,3] = C[1, 2] + C[2, 3] + B_3 - B_1 = 0 + 0 + 10 - 2 = 8$ since $k$ may only equal $2$, 
+		and $C[2,4] = C[2, 3] + C[3, 4] + B_4 - B_2 = 0 + 0 + 20 - 8 = 12$ since $k$ may only equal $3$.</p>
+		<p>Then the next row, $C[0,3] = \min(C[0,1] + C[1,3], C[0,2] + C[2,3]) + B_3 - B_0 = min(0 + 8, 8 + 0) + 10 - 0 = 18$.</p>
+		<p>And $C[1,4] = \min(C[1,2] + C[2,4], C[1,3] + C[3,4]) + B_4 - B_1 = min(0 + 12, 8 + 0) + 20 - 2 = 26$.</p>
+		<p>Finally, the last row, $C[0,4] = \min(C[1,4],C[0,2]+C[2,4],C[0,3]) + B_4 - B_0 = min(26,8+12,18) + 20 - 0 = 38$.</p>
+		<div style="text-align:center"><pre style="text-align:left;display:inline-block;">
+     38
+   18  26
+  8  8  12
+0  0   0   0
+</pre></div>
+	</li>
+	<li>
+		<blockquote>Implement your solution using dynamic programming or memoization.</blockquote>
+		<p>This goes essentially the same way as in Problem 8.</p>
+		
+		<p>Recall that 
+			$$
+			C[i,j] = 
+			\begin{cases} 
+				0 & i = j - 1 \\
+				\min\limits_{i < k < j} \{C[i, k] + C[k, j] \} + B_j - B_i & i < j - 1
+			\end{cases}
+			$$.
+		</p>
+		
+		<div class="codeblock">
+function cost(strlength, breaks){
+	var tree = [[]]; //Stores the tree for the dynamic programming storage.
+	var breakorder = [[]]; //Stores the break orders for each element in the tree
+	var len = breaks.length + 1; //The number of segments. Useful because breaks[0] and breaks[len] are going to be added as the extremes.
+	
+	//Add in B_0 = 0 and B_N = L so things generalize a little bit better (rather than using prolific if statements)
+	breaks.splice(0,0,0);
+	breaks[len] = strlength;
+	
+	for(var i = 0; i <= len; i++){
+		tree[i] = [];
+		tree[i][i + 1] = 0;
+		
+        //Initialize the break-order expressions - you don't break any strings when the indices are only one apart
+		breakorder[i] = [];
+		breakorder[i][i + 1] = "";
+	}
+	
+	for(var treerow = 2; treerow <= len; treerow++){ //For each row of the tree after the 1st,
+		for(var i = 0; i <= len - treerow; i++){ //For each element of that row,
+			var j = i + treerow;
+			
+			//we find the cost formula's minimum across all k
+			var mincost = tree[i][i+1] + tree[i+1][j] + breaks[j] - breaks[i]; //(initialize with first iteration of loop (k=i+1), to avoid setting min = some arbitrary large number)
+			var mink = i+1;
+			
+			for(var k = i+2; k < j; k++){
+				var cost = tree[i][k] + tree[k][j] + breaks[j] - breaks[i];
+				if(cost < mincost){mincost = cost; mink = k;}
+			}
+			tree[i][j] = mincost; //and set that element in the tree to be that minimum cost
+			breakorder[i][j] = breaks[mink]
+				+ ((breakorder[i][mink]!="")? ", " + breakorder[i][mink]: "")
+				+ ((breakorder[mink][j]!="")? ", " + breakorder[mink][j]: ""); //and use that minimizing k to figure out the break-order
+		}
+	}
+    
+	return [tree[0][len], breakorder[0][len]];//Finally, we return the apex element and its corresponding break-order.
+}
+var c = cost(20,[2,8,10]);
+console.log("Cost: " + c[0]); //Should be 38
+console.log("Break order: " + c[1]); //Should be 10, 2, 8 or 10, 8, 2
+
+var c = cost(8,[1,3,6,7]);
+console.log("Cost: " + c[0]); //Should be 18
+console.log("Break order: " + c[1]); //Should be 3, 1, 6, 7 or 3, 6, 7, 1 or any number of equivalent expressions
+		</div>
+	</li>
+</ol>
+
+</article>
+<footer>
+	<div>MIT PRIMES Application 2016</div>
+	<a href="#top">Back to top</a>
+</footer>
+
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({tex2jax: {
+		inlineMath: [['$','$']],
+		displayMath: [['$$','$$']]
+	}});
+	//I really don't like such close line spacing. https://groups.google.com/forum/#!topic/mathjax-users/nXJ0IDorrsE
+	/*MathJax.Hub.Register.StartupHook("mml Jax Ready",function () {
+		MathJax.ElementJax.mml.math.prototype.defaults.lineleading = "100px";
+	});*/ //It doesn't work :( 
+</script>
+<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="codeblock.js/ace.js"></script>
+<script src="codeblock.js/codeblock.js"></script>
+<script>
+	$(function(){$(".codeblock").codeblock();});
+</script>
+</body>
+</html>
