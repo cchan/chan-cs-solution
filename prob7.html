@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <!--
-Problem: 7
-Language: JavaScript (with HTML and CSS)
+Problem 7
+
+Language: JavaScript (with HTML, CSS)
 How to use: Just open this file in a relatively modern browser!
+
+(Compiled from /src with compile.js.)
 -->
 <html>
 <head>
@@ -15,47 +18,53 @@ How to use: Just open this file in a relatively modern browser!
 <header>
 	<h1>MIT PRIMES Application 2016</h1>
 	<h2>Problem 7</h2>
-	<noscript><h2 style="color:red">Your JavaScript is off :( It's very hard to use this without JavaScript!</h2></noscript>
+	<noscript><h2 style="color:red">All of my code is in JavaScript, but your browser's JavaScript is off :(</h2></noscript>
 	<nav>
-		Go to problem:
-		<a href="index.html">Index</a>
-		<a href="prob1.html">1</a>
-		<a href="prob2.html">2</a>
-		<a href="prob3.html">3</a>
-		<a href="prob4.html">4</a>
-		<a href="prob5.html">5</a>
-		<a href="prob6.html">6</a>
-		<b>7</b>
-		<a href="prob8.html">8</a>
-		<a href="prob9.html">9</a>
-		<a href="prob10.html">10</a>
-		<a href="prob11.html">11</a>
-		<a href="prob12.html">12</a>
-		<a href="sources.html">Sources</a>
+		Go to:
+		<a href='index.html'>Index</a> 
+<a href='prob1.html'>1</a> 
+<a href='prob2.html'>2</a> 
+<a href='prob3.html'>3</a> 
+<a href='prob4.html'>4</a> 
+<a href='prob5.html'>5</a> 
+<a href='prob6.html'>6</a> 
+<b>7</b> 
+<a href='prob8.html'>8</a> 
+<a href='prob9.html'>9</a> 
+<a href='prob10.html'>10</a> 
+<a href='prob11.html'>11</a> 
+<a href='prob12.html'>12</a> 
+<a href='libraries.html'>Libraries</a> 
+
 	</nav>
 </header>
 <article>
-	<ol>
-		<li>
-		</li>
-		<li>
-		</li>
-	</ol>
+<ol>
+	<li>
+	</li>
+</ol>
+
 </article>
 <footer>
 	<div>MIT PRIMES Application 2016</div>
 	<a href="#top">Back to top</a>
 </footer>
 
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({tex2jax: {
+		inlineMath: [['$','$']],
+		displayMath: [['$$','$$']]
+	}});
+	//I really don't like such close line spacing. https://groups.google.com/forum/#!topic/mathjax-users/nXJ0IDorrsE
+	/*MathJax.Hub.Register.StartupHook("mml Jax Ready",function () {
+		MathJax.ElementJax.mml.math.prototype.defaults.lineleading = "100px";
+	});*/ //It doesn't work :( 
+</script>
 <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="codeblock.js/ace.js"></script>
 <script src="codeblock.js/codeblock.js"></script>
 <script>
-	MathJax.Hub.Config({tex2jax: {
-		inlineMath: [['$','$']],
-		displayMath: [['$$','$$']]
-	}});
 	$(function(){$(".codeblock").codeblock();});
 </script>
 </body>

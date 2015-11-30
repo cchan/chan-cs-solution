@@ -67,15 +67,21 @@ console.log(fibonacciLoop(10)); //Should be 55
 	<a href="#top">Back to top</a>
 </footer>
 
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({tex2jax: {
+		inlineMath: [['$','$']],
+		displayMath: [['$$','$$']]
+	}});
+	//I really don't like such close line spacing. https://groups.google.com/forum/#!topic/mathjax-users/nXJ0IDorrsE
+	/*MathJax.Hub.Register.StartupHook("mml Jax Ready",function () {
+		MathJax.ElementJax.mml.math.prototype.defaults.lineleading = "100px";
+	});*/ //It doesn't work :( 
+</script>
 <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="codeblock.js/ace.js"></script>
 <script src="codeblock.js/codeblock.js"></script>
 <script>
-	MathJax.Hub.Config({tex2jax: {
-		inlineMath: [['$','$']],
-		displayMath: [['$$','$$']]
-	}});
 	$(function(){$(".codeblock").codeblock();});
 </script>
 </body>

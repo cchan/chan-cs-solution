@@ -1,5 +1,5 @@
 <ol>
-	<li class="only">
+	<li>
 		<blockquote>
 		Let $m[i, j]$ denote the optimal (minimal) number of scalar multiplications
 		to multiply matrices from an index $i$ to an index $j$ (with $1 \leq i \leq j \leq n$) in a given
@@ -13,41 +13,59 @@
 		\end{cases}
 		$$
 		
-		Determine the optimal way of multiplying $A_1 \times A_2 \times A_3$ (i.e. the case when $i = 1$, $j = 3$) in the example in the previous problem. 
-		Also determine the optimal way of multiplying $A_2 \times A_3 \times A_4$.
+		Determine the optimal way of multiplying $A_1 \times A_2 \times A_3$ (i.e. the case when $i = 1$, $j = 3$) in the example in the previous problem.
 		</blockquote>
 		
-		<p>First, from the previous problem, $p = 5, 4, 2, 10, 3$.</p>
+		<p>First, from the previous problem, $p_i = 5, 4, 2, 10, 3$ for $i \in \{0,1,2,3,4\}$.</p>
 		<p>
 		Since $i=1$ and $j=3$,
 			$$
-			m[1,3] = \min\limits_{k=1,2} \{m[1,k] + m[k+1, 3] + p_0 \cdot p_k \cdot p_3\}
-			       = \min()
+			\begin{align*}
+			m[1,3] &= \min\limits_{k \in \{1,2\}} \{m[1,k] + m[k+1, 3] + p_0 \cdot p_k \cdot p_3\}\\
+			&= \min(m[1,1] + m[2,3] + p_0 \cdot p_1 \cdot p_3,\ \  m[1,2] + m[3,3] + p_0 \cdot p_2 \cdot p_3)\\
+			&= \min(m[2,3] + 5 \cdot 4 \cdot 10,\ \  m[1,2] + 5 \cdot 2 \cdot 10)
+			\end{align*}
 			$$
 		</p>
+		<p>The products in there, of course, represent the scalar multiplications required for the outer layer of parentheses. The inner layer is yet to be calculated ($m[2,3]$, $m[1,2]$).</p>
+		<p>Having slightly simplified the initial monstrosity of an expression, we now have to calculate $m[2,3]$ and $m[1,2]$. 
+		This is only two matrices, and we already know how to find the number of scalar multiplications required for such a calculation: 
+		$n \cdot m \cdot k$. (This may also be derived from the complex formula given by seeing that the formula is finding the $min$ over a single value of $k$, 
+		resulting in simply $p_{i-1} \cdot p_i \cdot p_j$.)</p>
+		<p>Let's codify this into a <b>Lemma:</b>
+			$$
+			\begin{align*}
+			m[i,i+1] &= \min\limits_{k \in \{i\}} \{m[i,k] + m[k+1,i+1] + p_{i-1} \cdot p_k \cdot p_{i+1}\}\\
+			&= m[i,i] + m[i+1,i+1] + p_{i-1} \cdot p_i \cdot p_{i+1}\\
+			&= p_{i-1} \cdot p_i \cdot p_{i+1}
+			\end{align*}
+			$$
+		</p>
+		<p>Thus $m[2,3] = p_1 \cdot p_2 \cdot p_3 = 4 \cdot 2 \cdot 10 = 80$, and $m[1,2] = p_0 \cdot p_1 \cdot p_2 = 40$.</p>
+		<p>Therefore 
+			$$
+			\begin{align*}
+			m[1,3] &= \min(m[2,3] + 5 \cdot 4 \cdot 10,\ \  m[1,2] + 5 \cdot 2 \cdot 10)\\
+			&= \min(80 + 200,\ \  40 + 100)\\
+			&= 40 + 100 = 140
+			\end{align*}
+			$$
+		</p>
+		<p>Since it was the expression containing $m[1,2]$ that had the more efficient multiplication, the most efficient way to multiply the three matrices is $\boxed{(A_1 \times A_2) \times A_3}$.
+	</li>
+	<li>
+		<blockquote>Also determine the optimal way of multiplying $A_2 \times A_3 \times A_4$.</blockquote>
+		<p>Taking some shortcuts and hints from the above, 
+			$$
+			\begin{align*}
+			m[2,4] &= \min(m[3,4] + p_1 \cdot p_2 \cdot p_4,\ \  m[2,3] + p_1 \cdot p_3 \cdot p_4)\\
+			&= \min(p_2 \cdot p_3 \cdot p_4 + p_1 \cdot p_2 \cdot p_4,\ \  p_1 \cdot p_2 \cdot p_3 + p_1 \cdot p_3 \cdot p_4)\\
+			&= \min(2 \cdot 10 \cdot 3 + 4 \cdot 2 \cdot 3,\ \  4 \cdot 2 \cdot 10 + 4 \cdot 10 \cdot 3)\\
+			&= \min(60 + 24,\ \  80 + 120)\\
+			&= 84
+			\end{align*}
+			$$
+		</p>
+		<p>The minimum is coming from the side with $m[3,4]$, which means $A_3 \times A_4$ needs to be multiplied first. $\boxed{A_2 \times (A_3 \times A_4)}$
 	</li>
 </ol>
-
-<!--
-
-Since not all ways of multiplying matrices require the same
-number of scalar multiplications, we will consider the following problem. The
-matrix chain multiplication problem is defined as follows: given a sequence of
-matrices A1, A2, . . . An, where Ai has dimensions pi−1×pi
-, and Ai−1 and Ai are
-compatible for all 1 ≤ i ≤ n, determine the order of computing A1×A2×· · ·×An
-with the minimum number of scalar multiplications. Note that the problem
-does not ask you to multiply the matrices, just to figure out the optimal way of
-multiplying them.
-Let m[i, j] denote the optimal (minimal) number of scalar multiplications
-to multiply matrices from an index i to an index j (1 ≤ i ≤ j ≤ n) in a given
-matrix sequence. m[i, j] is defined recursively as follows:
-m[i, j] = (
-0 if i = j
-min
-i≤k<j
-{m[i, k] + m[k + 1, j] + pi−1 · pk · pj} if i < j
-Apply this formula to determine the optimal way of multiplying A1 × A2 × A3
-(i.e. the case when i = 1, j = 3) in the example in the previous problem. Also
-determine the optimal way of multiplying A2 × A3 × A4. Show your work
--->
