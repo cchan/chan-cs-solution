@@ -1,0 +1,15 @@
+<ol>
+	<li class="only">
+		<blockquote>Come up with an optimal solution (by hand) for breaking a string of $20$ units after the characters $2$, $8$, and $10$.</blockquote>
+		<p>I'm not sure how to prove optimality in this situation without bruteforcing, so here we go. Let's label the break after character $2$ as A, after $8$ as B, and after $10$ as C.</p>
+		<ul>
+			<li>$ABC \Rightarrow \text{ costs } 20 + 18 + 12 = 50$</li>
+			<li>$ACB \Rightarrow \text{ costs } 20 + 18 + 8 = 46$</li>
+			<li>$BAC \Rightarrow \text{ costs } 20 + 8 + 12 = 40$</li>
+			<li>$BCA \Rightarrow \text{ costs } 20 + 12 + 8 = 40$</li>
+			<li>$CAB \Rightarrow \text{ costs } 20 + 10 + 8 = 38$</li>
+			<li>$CBA \Rightarrow \text{ costs } 20 + 10 + 8 = 38$</li>
+		</ul>
+		<p>So the cheapest way to do it is to break at C first, then A and B in either order (same cost).</p>
+	</li>
+</ol>

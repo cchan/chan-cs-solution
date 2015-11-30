@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+Problem 8
+
+Language: JavaScript (with HTML, CSS)
+How to use: Just open this file in a relatively modern browser!
+
+(Compiled from /src with compile.js.)
+-->
+<html>
+<head>
+	<title>MIT PRIMES Application 2016 - Problem 8</title>
+	<link rel="stylesheet" href="codeblock.js/codeblock.css" />
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<a id="top"></a>
+<header>
+	<h1>MIT PRIMES Application 2016</h1>
+	<h2>Problem 8</h2>
+	<noscript><h2 style="color:red">All of my code is in JavaScript, but your browser's JavaScript is off :(</h2></noscript>
+	<nav>
+		Go to:
+		<a href='index.html'>Index</a> 
+<a href='prob1.html'>1</a> 
+<a href='prob2.html'>2</a> 
+<a href='prob3.html'>3</a> 
+<a href='prob4.html'>4</a> 
+<a href='prob5.html'>5</a> 
+<a href='prob6.html'>6</a> 
+<a href='prob7.html'>7</a> 
+<b>8</b> 
+<a href='prob9.html'>9</a> 
+<a href='prob10.html'>10</a> 
+<a href='prob11.html'>11</a> 
+<a href='prob12.html'>12</a> 
+<a href='libraries.html'>Libraries</a> 
+
+	</nav>
+</header>
+<article>
+<ol>
+	<li class="only">
+		<blockquote>Implement the dynamic programming solution (the one described in the previous problem) for any sequence of matrices.</blockquote>
+		<p>As always, we recall that
+		$$
+		m[i,j] = 
+		\begin{cases} 
+			0 & i = j \\
+			\min\limits_{i \leq k < j} \{m[i, k] + m[k + 1, j] + p_{i-1} \cdot p_k \cdot p_j\} & i < j
+		\end{cases}
+		$$
+		</p>
+		<p>The first "row" of the tree in Problem 7 consisted of those $m[i][j]$ with $j-i=0$, so $j = i$. The second row had $j-i=1$, so $j=i+1$, and so on. 
+		I use this organizing principle (with the variable <code>treerow</code>) to simplify the code.</p>
+		<div class="codeblock">
+function optimalMultiply(p){
+	var tree = []; //The tree as illustrated in Problem 7
+	var parens = []; //The string of parentheses for each problem (so we can backtrack and get the parentheses)
+	var len = p.length-1; //Number of matrices
+	
+	for(var i = 1; i <= len; i++){
+        //Initialize the first row with zero. It feels so wrong to not zero-index, but that's how the problem is.
+		tree[i] = [];
+		tree[i][i + 0] = 0;
+		
+        //Initialize the first paren expressions with "A_i".
+		parens[i] = [];
+		parens[i][i + 0] = "A"+i;
+	}
+	
+	for(var treerow = 1; treerow < len; treerow++){ //For each row of the tree after the 0th,
+		for(var i = 1; i <= len - treerow; i++){ //For each element of that row,
+			var j = i + treerow;
+			
+			//we find the cost formula's minimum across all k
+			var mincost = tree[i][i] + tree[i+1][j] + p[i-1] * p[i] * p[j]; //(initialize with first iteration of loop (k=i), to avoid setting min = some arbitrary large number)
+			var mink = i;
+			for(var k = i+1; k < j; k++){
+				var cost = tree[i][k] + tree[k+1][j] + p[i-1] * p[k] * p[j];
+				if(cost < mincost){mincost = cost; mink = k;}
+			}
+			tree[i][j] = mincost; //and set that element in the tree to be that minimum cost
+			parens[i][j] = "(" + parens[i][mink] + " * " + parens[mink+1][j] + ")"; //and use that minimizing k to figure out the parentheses
+		}
+	}
+    
+	return [tree[1][len], parens[1][len]];//Finally, we return the apex element and its corresponding parentheses.
+}
+
+
+console.log(optimalMultiply([5,4,2])); //Should be 40, (A1 * A2)
+console.log(optimalMultiply([5,4,2,10])); //Should be 140, ((A1 * A2) * A3)
+console.log(optimalMultiply([5,4,2,10,3])); //Should be 130, ((A1 * A2) * (A3 * A4))
+console.log(optimalMultiply([30,20,10,40,5,25])); //???
+		</div>
+		<p>Therefore the minimum number of scalar multiplications required to calculate the product of that sequence of 5 matrices is $\boxed{9750}$ and the corresponding sequence of multiplications is $\boxed{(A_1 \cdot (A_2 \cdot (A_3 \cdot A_4))) \cdot A_5}$.</p>
+	</li>
+</ol>
+</article>
+<footer>
+	<div>MIT PRIMES Application 2016</div>
+	<a href="#top">Back to top</a>
+</footer>
+
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({tex2jax: {
+		inlineMath: [['$','$']],
+		displayMath: [['$$','$$']]
+	}});
+	//I really don't like such close line spacing. https://groups.google.com/forum/#!topic/mathjax-users/nXJ0IDorrsE
+	/*MathJax.Hub.Register.StartupHook("mml Jax Ready",function () {
+		MathJax.ElementJax.mml.math.prototype.defaults.lineleading = "100px";
+	});*/ //It doesn't work :( 
+</script>
+<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="codeblock.js/ace.js"></script>
+<script src="codeblock.js/codeblock.js"></script>
+<script>
+	$(function(){$(".codeblock").codeblock();});
+</script>
+</body>
+</html>

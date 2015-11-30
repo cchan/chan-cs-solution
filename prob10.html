@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-Problem 7
+Problem 10
 
 Language: JavaScript (with HTML, CSS)
 How to use: Just open this file in a relatively modern browser!
@@ -9,7 +9,7 @@ How to use: Just open this file in a relatively modern browser!
 -->
 <html>
 <head>
-	<title>MIT PRIMES Application 2016 - Problem 7</title>
+	<title>MIT PRIMES Application 2016 - Problem 10</title>
 	<link rel="stylesheet" href="codeblock.js/codeblock.css" />
 	<link rel="stylesheet" href="style.css" />
 </head>
@@ -17,7 +17,7 @@ How to use: Just open this file in a relatively modern browser!
 <a id="top"></a>
 <header>
 	<h1>MIT PRIMES Application 2016</h1>
-	<h2>Problem 7</h2>
+	<h2>Problem 10</h2>
 	<noscript><h2 style="color:red">All of my code is in JavaScript, but your browser's JavaScript is off :(</h2></noscript>
 	<nav>
 		Go to:
@@ -28,10 +28,10 @@ How to use: Just open this file in a relatively modern browser!
 <a href='prob4.html'>4</a> 
 <a href='prob5.html'>5</a> 
 <a href='prob6.html'>6</a> 
-<b>7</b> 
+<a href='prob7.html'>7</a> 
 <a href='prob8.html'>8</a> 
 <a href='prob9.html'>9</a> 
-<a href='prob10.html'>10</a> 
+<b>10</b> 
 <a href='prob11.html'>11</a> 
 <a href='prob12.html'>12</a> 
 <a href='libraries.html'>Libraries</a> 
@@ -41,38 +41,7 @@ How to use: Just open this file in a relatively modern browser!
 <article>
 <ol>
 	<li>
-		<blockquote>
-		Fill in the table, then compute m[1, 4] using the equation in Problem 5. 
-		Show the parentheses for the optimal solution.
-		</blockquote>
-		<div style="text-align:center"><pre style="text-align:left;display:inline-block;">
-         m[1,4]
-     m[1,3]  m[2,4]
-   40      80      60
-0       0       0      0
-</pre></div>
-		<p>As previously determined, $m[1,3] = 140$, with $(A_1 \times A_2) \times A_3$. Also, $m[2,4] = 84$, with $A_2 \times (A_3 \times A_4)$</p>
-		<div style="text-align:center"><pre style="text-align:left;display:inline-block;">
-         m[1,4]
-       140     84
-   40      80      60
-0       0       0      0
-</pre></div>
-		<p>We recall that
-		$$
-		m[i,j] = 
-		\begin{cases} 
-			0 & i = j \\
-			\min\limits_{i \leq k < j} \{m[i, k] + m[k + 1, j] + p_{i-1} \cdot p_k \cdot p_j\} & i < j
-		\end{cases}
-		$$
-		and $p_i=\{5 4 2 10 3\}$ for $i \in \{0,1,2,3,4\}$.</p>
-		<p>Thus $m[1,4] = \min\limits_{k \in \{1,2,3\}}(m[1,k] + m[k+1,4] + p_0 \cdot p_k \cdot p_4)$.</p>
-		<p>For $k=1$ the expression is $m[1,1] + m[2,4] + p_0 \cdot p_1 \cdot p_4 = 0 + 84 + 5 \cdot 4 \cdot 3 = 144$.</p>
-		<p>For $k=2$ the expression is $m[1,2] + m[3,4] + p_0 \cdot p_2 \cdot p_4 = 40 + 60 + 5 \cdot 2 \cdot 3 = 130$.</p>
-		<p>For $k=3$ the expression is $m[1,3] + m[4,4] + p_0 \cdot p_3 \cdot p_4 = 140 + 0 + 5 \cdot 10 \cdot 3 = 290$.</p>
-		<p>The answer is thus $\min(144,130,290) = \boxed{130}$. This answer represents the "multiplication" of m[1,2] and m[3,4], 
-		so the parenthetical expression would be $\boxed{(A_1 \times A_2) \times (A_3 \times A_4)}$.</p>
+		<blockquote>Describe a recursive solution for this problem.</blockquote>
 	</li>
 </ol>
 </article>
